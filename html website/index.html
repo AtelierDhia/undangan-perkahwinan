@@ -1,0 +1,4392 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!--
+        Viewport untuk memastikan website responsive
+        dan mengelakkan zoom pada iPhone / iOS.
+    -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Undangan Pernikahan</title>
+
+
+    <!-- =========================================================
+         GOOGLE FONTS
+         Lora — untuk semua teks biasa di seluruh website.
+         Dancing Script — untuk tajuk setiap section (font
+         jenis script tapi mudah dibaca).
+         ========================================================= -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Dancing+Script:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         CSS
+         Semua CSS berada dalam fail index.html
+         ========================================================= -->
+
+    <style>
+
+        /* =========================================================
+           FONT 29LT RIWAYA (JAWI)
+
+           PENTING:
+           Ini font berlesen/berbayar dari 29Letters,
+           jadi TIDAK boleh dimuat terus dari CDN percuma.
+
+           Letakkan fail font sebenar (contoh:
+           29LTRiwaya-Regular.woff2) dalam folder yang sama
+           dengan index.html, kemudian betulkan nama fail
+           pada src url() di bawah.
+           ========================================================= */
+
+        @font-face {
+            font-family: "29LT Riwaya";
+            src: url("29LTRiwaya-Regular.woff2") format("woff2"),
+                 url("29LTRiwaya-Regular.woff") format("woff");
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+
+        /* =========================================================
+           RESET ASAS
+           ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: "Lora", serif;
+            background-image: url("body.webp");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================================
+           TAJUK SETIAP SECTION
+           Font jenis script yang masih mudah dibaca.
+           ========================================================= */
+
+        h2 {
+            font-family: "Dancing Script", cursive;
+            font-weight: 700;
+            font-size: 34px;
+        }
+
+
+        /* =========================================================
+           STRUKTUR SETIAP SECTION
+           Setiap section sekurang-kurangnya memenuhi satu skrin.
+           ========================================================= */
+
+        section {
+            position: relative;
+            min-height: 100svh;
+            width: 100%;
+            overflow: hidden;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 40px 20px;
+        }
+
+
+        /* =========================================================
+           VIDEO BACKGROUND
+           Setiap section mempunyai video sendiri.
+           ========================================================= */
+
+        .video-background {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            z-index: 0;
+        }
+
+
+        /* =========================================================
+           OVERLAY VIDEO
+           Hanya struktur asas.
+           Boleh ubah / buang kemudian.
+           ========================================================= */
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.15);
+
+            z-index: 1;
+        }
+
+
+        /* =========================================================
+           KANDUNGAN SECTION
+           ========================================================= */
+
+        .section-content {
+            position: relative;
+
+            z-index: 2;
+
+            width: 100%;
+            max-width: 800px;
+
+            text-align: center;
+        }
+
+
+        /* =========================================================
+           BUTTON ASAS
+           ========================================================= */
+
+        button {
+            cursor: pointer;
+            padding: 12px 24px;
+            border: 1px solid #000;
+            background: #fff;
+            color: #000;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           BUTTON BUKA UNDANGAN
+           Diturunkan 4 inci (2 inci + 2 inci tambahan)
+           daripada kedudukan asal.
+           Boleh laraskan nilai margin-top di bawah ikut keperluan.
+           ========================================================= */
+
+        #openInvitation {
+            margin-top: 4in;
+        }
+
+
+        /* =========================================================
+           ATUR CARA MAJLIS
+           Jarak 1 inci antara setiap bahagian (Hari/Tarikh,
+           Masa, Countdown, Button Simpan Tarikh).
+
+           Pada skrin telefon (mobile), jarak ini dikecilkan
+           secara automatik supaya kandungan tidak terpotong,
+           lihat bahagian RESPONSIVE di bawah.
+           ========================================================= */
+
+        :root {
+            --jarak-atur-cara: 1in;
+        }
+
+        #countdown-section {
+            overflow-y: auto;
+        }
+
+        #senarai-ucapan {
+            overflow-y: auto;
+        }
+
+        .atur-cara-item {
+            margin-top: var(--jarak-atur-cara);
+        }
+
+        .jarak-statistik-ucapan {
+            margin-top: 24px;
+        }
+
+        .atur-cara-label {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.85;
+        }
+
+        .atur-cara-value {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+
+        /* =========================================================
+           COUNTDOWN
+           ========================================================= */
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+
+            margin-top: 20px;
+        }
+
+
+        .countdown-item {
+            min-width: 70px;
+            padding: 15px;
+
+            border: 1px solid #000;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+
+        .countdown-number {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--warna-font-countdown);
+        }
+
+
+        .countdown-label {
+            font-size: 12px;
+            color: var(--warna-font-countdown);
+        }
+
+
+        /* =========================================================
+           RSVP FORM
+           ========================================================= */
+
+        .rsvp-form {
+            width: 100%;
+            max-width: 500px;
+
+            margin: 30px auto 0;
+
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            text-align: left;
+        }
+
+
+        .rsvp-form label {
+            font-weight: bold;
+        }
+
+
+        .rsvp-form input,
+        .rsvp-form select,
+        .rsvp-form textarea {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #000;
+            background: #fff;
+
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+
+        .rsvp-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+
+        /* =========================================================
+           JUMLAH TETAMU
+           Akan disembunyikan jika pilih Tidak Hadir.
+           ========================================================= */
+
+        #jumlahTetamuContainer {
+            display: none;
+        }
+
+
+        /* =========================================================
+           AUDIO PLAYER
+           ========================================================= */
+
+        .music-button {
+            position: fixed;
+
+            bottom: 85px;
+            right: 20px;
+
+            z-index: 1000;
+
+            width: 45px;
+            height: 45px;
+
+            padding: 0;
+
+            border-radius: 50%;
+
+            /* Glass effect */
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            color: #fff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+
+
+        /* =========================================================
+           MUSIC BUTTON — BERPUSING SEMASA MUZIK PLAY
+           ========================================================= */
+
+        @keyframes putarMuzik {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .music-button.sedang-main {
+            animation: putarMuzik 4s linear infinite;
+        }
+
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+
+        /* =========================================================
+           BOTTOM NAVIGATION — GLASS STYLE, ICON + TEXT
+
+           Nota untuk icon:
+           Fail icons/home.svg, calendar.svg, location.svg,
+           rsvp.svg, gift.svg kekal digunakan sebagai image icon.
+
+           Untuk nampak lebih "mahal", cadangan cari icon
+           bergaya garis nipis (thin line icon) warna hitam/emas
+           dari sumber macam Flaticon, IconScout atau The Noun
+           Project, bukan icon emoji/berwarna-warni.
+           ========================================================= */
+
+        .bottom-navigation {
+            position: fixed;
+
+            bottom: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 100%;
+            max-width: 600px;
+
+            padding: 10px 6px;
+
+            display: flex;
+            justify-content: space-around;
+            gap: 4px;
+
+            background: rgba(255, 255, 255, 0.55);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+
+            z-index: 999;
+        }
+
+
+        .nav-button {
+            flex: 1;
+            max-width: 90px;
+
+            padding: 6px 4px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+
+            transition: background 0.2s ease;
+        }
+
+        .nav-button:hover,
+        .nav-button:active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+
+        .nav-button img {
+            width: 22px;
+            height: 22px;
+
+            object-fit: contain;
+        }
+
+
+        .nav-label {
+            font-family: "Lora", serif;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            color: #000;
+        }
+
+
+        /* =========================================================
+           BUTTON LOKASI MAJLIS
+
+           Nota: sebelum ini kedudukan button diselaraskan
+           dengan "transform: translate()" kerana section masih
+           video penuh skrin. Sekarang button berada di dalam
+           glass box bersama hiasan + alamat, jadi jarak
+           digunakan margin-top biasa supaya kekal di dalam
+           kotak. Boleh laraskan nilai margin-top di bawah
+           ikut keperluan.
+           ========================================================= */
+
+        .lokasi-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .lokasi-button {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+
+            cursor: pointer;
+            padding: 12px 24px;
+            border: 1px solid #000;
+            background: #fff;
+            color: #000;
+            border-radius: 4px;
+        }
+
+
+        /* =========================================================
+           NOMBOR UNTUK DIHUBUNGI
+           ========================================================= */
+
+        .kenalan-list {
+            width: 100%;
+            max-width: 500px;
+
+            margin: 20px auto 0;
+
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .kenalan-item {
+            padding: 14px;
+
+            border: 1px solid #000;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+
+            text-align: center;
+        }
+
+        .kenalan-nama {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .kenalan-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .kenalan-button {
+            display: inline-block;
+            text-decoration: none;
+
+            padding: 8px 18px;
+
+            border: 1px solid #000;
+            background: #fff;
+            color: #000;
+            border-radius: 4px;
+
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           ANIMASI TEKS (muncul semasa scroll)
+           ========================================================= */
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-on-scroll.animasi-nampak {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+           SENARAI UCAPAN
+           ========================================================= */
+
+        /* =========================================================
+           STATISTIK KEHADIRAN
+           Glass style, hanya papar jumlah Hadir.
+           ========================================================= */
+
+        .statistik-hadir {
+            width: 100%;
+            max-width: 500px;
+
+            margin-left: auto;
+            margin-right: auto;
+
+            padding: 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .statistik-item {
+            text-align: center;
+        }
+
+        .statistik-angka {
+            display: block;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .statistik-label {
+            font-size: 13px;
+        }
+
+
+        .ucapan-list {
+            width: 100%;
+            max-width: 500px;
+
+            /*
+                Jarak dengan box statistik di atasnya.
+                Boleh ubah nilai margin-top ikut keperluan.
+            */
+            margin: 28px auto 0;
+
+            max-height: 420px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            text-align: center;
+
+            border-radius: 12px;
+        }
+
+        .ucapan-item {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid #000;
+            padding: 12px 15px;
+            border-radius: 12px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ucapan-item .ucapan-teks {
+            font-weight: bold;
+        }
+
+        .ucapan-item .ucapan-nama {
+            margin-top: 6px;
+            font-style: italic;
+            font-family: "Lora", serif;
+        }
+
+        .ucapan-kosong {
+            text-align: center;
+        }
+
+
+        /* =========================================================
+           SALAM KAUT — MODAL QR & SALIN AKAUN
+           ========================================================= */
+
+        .modal-overlay {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.6);
+
+            z-index: 2000;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            max-width: 340px;
+            width: 100%;
+
+            padding: 30px 20px;
+
+            border-radius: 8px;
+            text-align: center;
+
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+
+            width: 30px;
+            height: 30px;
+
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .modal-content img.qr-image {
+            width: 100%;
+            max-width: 220px;
+            margin: 15px auto;
+            display: block;
+            border: 1px solid #000;
+        }
+
+        .bank-edit-fields {
+            width: 100%;
+            margin-top: 10px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            text-align: left;
+        }
+
+        .bank-edit-fields label {
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .bank-edit-fields input {
+            width: 100%;
+            margin-top: 4px;
+
+            padding: 10px;
+
+            border: 1px solid #000;
+            background: #fff;
+
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .account-copy-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            margin-top: 4px;
+        }
+
+        .account-copy-row input {
+            flex: 1;
+        }
+
+        .account-copy-row button {
+            padding: 10px 14px;
+            white-space: nowrap;
+        }
+
+        #copyStatus {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           ADMIN — LINK, LOGIN & PANEL
+           ========================================================= */
+
+        .admin-link {
+            margin-top: 25px;
+            font-size: 13px;
+            text-decoration: underline;
+            opacity: 0.75;
+            cursor: pointer;
+        }
+
+        .admin-error {
+            color: #b00020;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .admin-success {
+            color: #1b5e20;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .admin-modal-content {
+            max-width: 480px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .admin-section h4 {
+            margin-bottom: 8px;
+        }
+
+        .kuota-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .kuota-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #000;
+            font-family: inherit;
+        }
+
+        .baki-kuota-text {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .rsvp-admin-list {
+            max-height: 320px;
+            overflow-y: auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            margin-top: 10px;
+        }
+
+        .rsvp-admin-item {
+            border: 1px solid #000;
+            padding: 10px;
+            background: #fff;
+            text-align: left;
+        }
+
+        .rsvp-admin-item label {
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-top: 6px;
+        }
+
+        .rsvp-admin-item input,
+        .rsvp-admin-item select,
+        .rsvp-admin-item textarea {
+            width: 100%;
+            margin-top: 3px;
+            padding: 6px;
+            border: 1px solid #000;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .rsvp-admin-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .rsvp-admin-actions button {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .rsvp-admin-ucapan {
+            font-size: 13px;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .rsvp-admin-status {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+
+        /* =========================================================
+           DOA PENUTUP (SECTION CLOSING)
+           ========================================================= */
+
+        #closing {
+            overflow-y: auto;
+        }
+
+        .doa-content {
+            max-width: 650px;
+            margin: 0 auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            line-height: 1.7;
+        }
+
+        .jawi-text {
+            font-family: "29LT Riwaya", serif;
+            font-size: 24px;
+            direction: rtl;
+        }
+
+        .doa-terjemahan,
+        .doa-text,
+        .doa-penutup {
+            font-family: "Lora", serif;
+            font-size: 14px;
+        }
+
+        .doa-penutup {
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+           SECTION PENUTUP (SECTION TERAKHIR)
+           Teks dinaikkan sedikit daripada tengah skrin.
+
+           Boleh ubah nilai --penutup-naik di bawah untuk
+           naik/turunkan kedudukan teks ikut keperluan.
+           ========================================================= */
+
+        :root {
+            --penutup-naik: 5in;
+        }
+
+        #penutup {
+            overflow-y: auto;
+        }
+
+        #penutup .section-content {
+            margin-top: calc(-1 * var(--penutup-naik));
+        }
+
+
+        /* =========================================================
+           HALAMAN 2 — BACKGROUND VIDEO TETAP (FIXED / STICKY)
+
+           Bermula dari section "opening" dan ke bawah, semua
+           section TIDAK ada video sendiri lagi. Semua guna
+           SATU video background sahaja (lihat elemen
+           <video class="background-video-halaman-dua"> selepas
+           tag <body>) yang kedudukannya "fixed" — bila tetamu
+           scroll, hanya maklumat/teks yang bergerak, video
+           background kekal diam di tempatnya (cuma animasi
+           dalam video itu sendiri yang bergerak).
+
+           Fail video boleh ditukar terus pada "src" video
+           tersebut dalam HTML (cari
+           "bg-video.mp4").
+           ========================================================= */
+
+        #opening,
+        #nama-pengantin,
+        #countdown-section,
+        #informasi-acara,
+        #nombor-dihubungi,
+        #rsvp,
+        #senarai-ucapan,
+        #gift,
+        #closing,
+        #penutup {
+            background: transparent;
+        }
+
+        .background-video-halaman-dua {
+            position: fixed;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            z-index: -1;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           GLASS BOX — PEMBUNGKUS KACA UNTUK SETIAP SECTION
+
+           Digunakan supaya teks/maklumat lebih mudah dibaca
+           di atas background imej yang statik.
+           ========================================================= */
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+
+            padding: 30px 22px;
+        }
+
+
+        /* =========================================================
+           WARNA FONT — SATU VARIABLE UNTUK SETIAP SECTION
+
+           Setiap section ada warna font sendiri, senang nak
+           tukar satu-satu tanpa jejaskan section lain.
+
+           CARA TUKAR:
+           Cari nama section yang kau nak tukar di bawah,
+           tukar sahaja nilai kod warna hex tu (contoh
+           #000000 kepada #4a3222). Section lain tak akan
+           terjejas.
+
+           NOTA — kotak background PUTIH PEKAT:
+           Beberapa kotak (Atur Cara/Countdown, Nombor
+           Dihubungi, Ucapan yang dihantar tetamu) ada
+           background putih pekat (bukan glass lutsinar).
+           Kalau kau set warna section tu jadi putih/terang,
+           teks akan sukar dibaca atas kotak putih tu —
+           outline hitam nipis dah ditambah untuk bantu,
+           tapi elok juga guna warna gelap untuk
+           section-section ni.
+           ========================================================= */
+
+        :root {
+            --warna-font-opening: #faf5f5;
+            --warna-font-nama-pengantin: #f8f3f3;
+            --warna-font-atur-cara: #f7f0f0;
+            --warna-font-countdown: #000000;
+            --warna-font-lokasi: #f5ecec;
+            --warna-font-kenalan: #000000;
+            --warna-font-rsvp: #f8f2f2;
+            --warna-font-ucapan: #000000;
+            --warna-font-salam-kasih: #f7efef;
+            --warna-font-doa: #f7f2f2;
+            --warna-font-penutup: #f7efef;
+        }
+
+        #opening {
+            color: var(--warna-font-opening);
+        }
+
+        #nama-pengantin {
+            color: var(--warna-font-nama-pengantin);
+        }
+
+        #countdown-section {
+            color: var(--warna-font-atur-cara);
+        }
+
+        #informasi-acara {
+            color: var(--warna-font-lokasi);
+        }
+
+        #nombor-dihubungi {
+            color: var(--warna-font-kenalan);
+        }
+
+        #rsvp {
+            color: var(--warna-font-rsvp);
+        }
+
+        #senarai-ucapan {
+            color: var(--warna-font-ucapan);
+        }
+
+        #gift {
+            color: var(--warna-font-salam-kasih);
+        }
+
+        #closing {
+            color: var(--warna-font-doa);
+        }
+
+        #penutup {
+            color: var(--warna-font-penutup);
+        }
+
+
+        /* =========================================================
+           SECTION OPENING — GLASS SHAPE + POTONGAN AYAT AL-QURAN
+           ========================================================= */
+
+        .ayat-box {
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .ayat-arab {
+            font-family: "29LT Riwaya", "Traditional Arabic", serif;
+            direction: rtl;
+            font-size: 24px;
+            line-height: 2;
+            margin-bottom: 22px;
+        }
+
+        .ayat-terjemahan {
+            font-family: "Lora", serif;
+            font-style: italic;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .ayat-rujukan {
+            font-family: "Lora", serif;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+
+        /* =========================================================
+           SECTION NAMA PENGANTIN — HIASAN + TEKS JEMPUTAN
+
+           Hiasan (hiasan-detail.png) — dibesarkan 3 inci
+           daripada saiz asal (1in x 2in), jadi sekarang
+           4 inci (lebar) x 5 inci (tinggi). Tukar nilai
+           width/height di bawah ikut keperluan, atau
+           gantikan fail imej hiasan-detail.png.
+           ========================================================= */
+
+        .hiasan-detail {
+            display: block;
+            width: 4in;
+            height: 5in;
+            object-fit: contain;
+            margin: 0 auto 20px;
+        }
+
+        .jemputan-box {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .jemputan-salam {
+            font-family: "Lora", serif;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 18px;
+        }
+
+        /* Nama ayah & ibu pengantin — Lora bold, huruf besar */
+        .nama-ibubapa {
+            font-family: "Lora", serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 16px;
+        }
+
+        .jemputan-box .simbol-dan {
+            font-family: "Lora", serif;
+            margin: 6px 0;
+        }
+
+        .jemputan-teks {
+            font-family: "Lora", serif;
+            font-size: 14px;
+            line-height: 1.9;
+            margin: 18px 0;
+        }
+
+        /* Nama pengantin — font script, lebih besar sedikit
+           berbanding font nama ayah/ibu di atasnya */
+        .nama-pengantin-script {
+            font-family: "Dancing Script", cursive;
+            font-weight: 700;
+            font-size: 30px;
+            margin: 6px 0;
+        }
+
+
+        /* =========================================================
+           SECTION LOKASI MAJLIS — HIASAN LINE ILLUSTRATION + ALAMAT
+
+           Hiasan (hiasan-lokasi.svg) — dibesarkan 1 inci
+           daripada saiz asal (2in x 2in), jadi sekarang
+           3 inci x 3 inci. Tukar nilai width/height di bawah
+           ikut keperluan, atau gantikan fail imej
+           hiasan-lokasi.svg dengan line illustration pilihan anda.
+           ========================================================= */
+
+        .hiasan-lokasi {
+            display: block;
+            width: 3in;
+            height: 3in;
+            object-fit: contain;
+            margin: 0 auto 16px;
+        }
+
+        .alamat-lokasi {
+            font-family: "Lora", serif;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 10px 0 20px;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 600px) {
+
+            section {
+                padding: 30px 15px;
+            }
+
+            .countdown {
+                gap: 8px;
+            }
+
+            .countdown-item {
+                min-width: 65px;
+            }
+
+            .bottom-navigation {
+                max-width: 100%;
+            }
+
+            /*
+                Jarak 1 inci dikecilkan pada telefon
+                supaya kandungan "Atur Cara Majlis"
+                tidak terpotong pada skrin kecil.
+            */
+
+            :root {
+                --jarak-atur-cara: 22px;
+            }
+
+            .ayat-arab {
+                font-size: 19px;
+            }
+
+            .hiasan-detail {
+                width: 2.2in;
+                height: 2.75in;
+            }
+
+            .hiasan-lokasi {
+                width: 2in;
+                height: 2in;
+            }
+
+            .glass-box {
+                padding: 24px 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         AUDIO BACKGROUND
+         ========================================================= -->
+
+    <audio id="backgroundMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Browser anda tidak menyokong audio.
+    </audio>
+
+
+    <!-- =========================================================
+         BUTTON PLAY / PAUSE MUSIC
+         ========================================================= -->
+
+    <button
+        id="musicButton"
+        class="music-button"
+        aria-label="Play atau Pause muzik"
+    >
+        ▶
+    </button>
+
+
+
+    <!-- =========================================================
+         BACKGROUND VIDEO — HALAMAN 2 (SELEPAS COVER)
+
+         Video ini kedudukannya "fixed" (tetap) merentasi
+         seluruh skrin, di belakang semua section selepas
+         "cover". Bila tetamu scroll, video ini TIDAK bergerak
+         — cuma animasi dalam video itu sendiri yang jalan,
+         dan section-section (opening, nama-pengantin, atur
+         cara, dsb) scroll di atasnya.
+
+         Gantikan src di bawah dengan fail video sebenar
+         (contoh: bg-video.mp4).
+         ========================================================= -->
+
+    <video
+        class="background-video-halaman-dua"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="body.webp"
+    >
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
+
+
+
+    <!-- =========================================================
+         1. COVER
+         Section pembukaan utama.
+
+         Video:
+         1.mp4
+         ========================================================= -->
+
+    <section id="cover">
+
+        <video
+            class="video-background"
+            autoplay
+            muted
+            loop
+            playsinline
+        >
+            <source src="1.mp4" type="video/mp4">
+        </video>
+<div class="video-overlay"></div>
+
+<div class="section-content">
+
+    <button id="openInvitation">
+        
+        BUKA UNDANGAN
+    </button>
+
+</div>
+    </section>
+
+
+
+    <!-- =========================================================
+         2. OPENING (INTRO)
+         Section pembukaan selepas cover — halaman 2 bermula
+         di sini. Background guna imej statik (body.webp),
+         tiada video lagi. Kandungan: glass shape + potongan
+         ayat Al-Quran (Surah Ar-Rum 30:21).
+         ========================================================= -->
+
+    <section id="opening">
+
+        <div class="section-content">
+
+            <div class="glass-box ayat-box animate-on-scroll">
+
+                <p class="ayat-arab">
+                    وَمِنْ ءَايَـٰتِهِۦٓ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَٰجًۭا لِّتَسْكُنُوٓا۟ إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةًۭ وَرَحْمَةً ۚ إِنَّ فِى ذَٰلِكَ لَـَٔايَـٰتٍۢ لِّقَوْمٍۢ يَتَفَكَّرُونَ
+                </p>
+
+                <p class="ayat-terjemahan">
+                    "Dan di antara tanda-tanda (kebesaran)-Nya ialah
+                    Dia menciptakan pasangan-pasangan untukmu
+                    dari jenismu sendiri, agar kamu cenderung dan
+                    merasa tenteram kepadanya, dan Dia menjadikan
+                    di antaramu rasa kasih dan sayang.
+                    Sungguh, pada yang demikian itu benar-benar
+                    terdapat tanda-tanda (kebesaran Allah) bagi
+                    kaum yang berfikir."
+                </p>
+
+                <p class="ayat-rujukan">
+                    Surah Ar-Rum (30:21)
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         3. NAMA PENGANTIN (DETAIL)
+         Background video tetap (fixed). Hiasan + teks jemputan
+         (nama ibu bapa & nama pengantin).
+         ========================================================= -->
+
+    <section id="nama-pengantin">
+
+        <div class="section-content">
+
+            <!--
+                Gantikan src di bawah dengan fail hiasan
+                sebenar (lebih kurang 1in x 2in).
+            -->
+            <img
+                src="hiasan-detail.png"
+                alt="Hiasan"
+                class="hiasan-detail animate-on-scroll"
+            >
+
+            <div class="glass-box jemputan-box animate-on-scroll">
+
+                <p class="jemputan-salam">
+                    Assalamualaikum dan Salam Sejahtera
+                </p>
+
+                <p class="nama-ibubapa" id="namaAyahPengantin">
+                    NAMA AYAH PENGANTIN
+                </p>
+
+                <p class="simbol-dan">&amp;</p>
+
+                <p class="nama-ibubapa" id="namaIbuPengantin">
+                    NAMA IBU PENGANTIN
+                </p>
+
+                <p class="jemputan-teks">
+                    Dengan penuh takzim dan hormat,
+                    kami menjemput<br>
+                    Dato'/Datin/Tuan/Puan/Encik/Cik<br>
+                    ke majlis perkahwinan puteri kami
+                </p>
+
+                <p class="nama-pengantin-script" id="namaPengantinWanita">
+                    Andy
+                </p>
+
+                <p class="jemputan-teks">
+                    dengan pasangannya
+                </p>
+
+                <p class="nama-pengantin-script" id="namaPengantinLelakiJemputan">
+                    Bunga
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         4. ATUR CARA MAJLIS (dahulu "Countdown")
+         Hari, Tarikh, Masa Majlis dan Countdown automatik.
+
+         PENTING:
+         Hari Majlis, Tarikh Majlis dan Masa Majlis di bawah
+         DIJANA SECARA AUTOMATIK oleh JavaScript daripada
+         pemboleh ubah eventDate / eventEndDate.
+
+         Untuk tukar tarikh/masa majlis, cari dalam
+         JavaScript:
+
+         const eventDate = new Date("2026-08-30T19:00:00+08:00");
+         const eventEndDate = new Date("2026-08-30T22:00:00+08:00");
+
+         dan tukar nilainya sahaja — Hari Majlis, Tarikh Majlis,
+         Masa Majlis dan Countdown semua akan update sendiri.
+
+         Background video tetap (fixed). Kandungan dibungkus dalam
+         glass box supaya mudah dibaca.
+         ========================================================= -->
+
+    <section id="countdown-section">
+
+        <div class="section-content glass-box">
+
+            <h2>Atur Cara Majlis</h2>
+
+
+            <!--
+                ============================================
+                TARIKH & MASA SEBENAR MAJLIS (UNTUK COUNTDOWN)
+                ============================================
+
+                INI SATU-SATUNYA TEMPAT kau perlu tukar bila
+                nak guna html ni untuk client/majlis baru.
+
+                Format WAJIB ikut macam ni:
+                YYYY-MM-DDTHH:MM:SS+08:00
+
+                Contoh: majlis 30 Ogos 2026, mula 7:00 malam,
+                tamat 10:00 malam:
+
+                data-mula="2026-08-30T19:00:00+08:00"
+                data-tamat="2026-08-30T22:00:00+08:00"
+
+                Countdown, dan button "Simpan Tarikh"
+                (Google Calendar) automatik guna nilai ni.
+
+                Teks "Hari Majlis", "Tarikh Majlis" dan
+                "Masa Majlis" di bawah TIDAK auto-tukar —
+                edit teks tu SENDIRI supaya sepadan dengan
+                tarikh/masa yang kau letak di sini.
+            -->
+
+            <div
+                id="dataMajlis"
+                data-mula="2026-12-12T19:00:00+08:00"
+                data-tamat="2026-12-12T22:00:00+08:00"
+                style="display: none;"
+            ></div>
+
+
+            <!-- Hari Majlis & Tarikh Majlis (boleh edit terus) -->
+
+            <div class="atur-cara-item">
+
+                <p class="atur-cara-label">
+                    Hari Majlis
+                </p>
+
+                <p
+                    id="hariMajlis"
+                    class="atur-cara-value"
+                >
+                    Sabtu
+                </p>
+
+                <p class="atur-cara-label">
+                    Tarikh Majlis
+                </p>
+
+                <p
+                    id="tarikhMajlis"
+                    class="atur-cara-value"
+                >
+                    12 Disember 2026
+                </p>
+
+            </div>
+
+
+            <!-- Masa Majlis (boleh edit terus) -->
+
+            <div class="atur-cara-item">
+
+                <p class="atur-cara-label">
+                    Masa Majlis
+                </p>
+
+                <p
+                    id="masaMajlis"
+                    class="atur-cara-value"
+                >
+                     7:00 malam - 10:00 malam
+                </p>
+
+            </div>
+
+
+            <!-- Countdown -->
+
+            <div class="atur-cara-item countdown">
+
+                <div class="countdown-item">
+                    <span
+                        id="days"
+                        class="countdown-number"
+                    >
+                        120
+                    </span>
+
+                    <span class="countdown-label">
+                        Hari
+                    </span>
+                </div>
+
+
+                <div class="countdown-item">
+                    <span
+                        id="hours"
+                        class="countdown-number"
+                    >
+                        0
+                    </span>
+
+                    <span class="countdown-label">
+                        Jam
+                    </span>
+                </div>
+
+
+                <div class="countdown-item">
+                    <span
+                        id="minutes"
+                        class="countdown-number"
+                    >
+                        0
+                    </span>
+
+                    <span class="countdown-label">
+                        Minit
+                    </span>
+                </div>
+
+
+                <div class="countdown-item">
+                    <span
+                        id="seconds"
+                        class="countdown-number"
+                    >
+                        0
+                    </span>
+
+                    <span class="countdown-label">
+                        Saat
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!--
+                Mesej ini akan muncul selepas acara selesai.
+            -->
+
+            <p
+                id="eventFinished"
+                style="display: none; margin-top: 20px;"
+            >
+                Acara telah selesai
+            </p>
+
+
+            <!-- Button Simpan Tarikh -> Google Calendar -->
+
+            <div class="atur-cara-item">
+
+                <button
+                    type="button"
+                    id="simpanTarikhButton"
+                >
+                    Simpan Tarikh
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         5. LOKASI MAJLIS (dahulu "Informasi Acara")
+
+         Gantikan href pada butang di bawah dengan link
+         Google Maps sebenar lokasi majlis.
+
+         Background video tetap (fixed). Hiasan line illustration +
+         alamat + button lokasi, semua dibungkus glass box.
+         ========================================================= -->
+
+    <section id="informasi-acara">
+
+        <div class="section-content glass-box">
+
+            <!--
+                Gantikan src di bawah dengan fail line
+                illustration sebenar (lebih kurang 2in x 2in).
+            -->
+            <img
+                src="hiasan-lokasi.svg"
+                alt="Hiasan Lokasi"
+                class="hiasan-lokasi animate-on-scroll"
+            >
+
+            <!--
+                Tukar alamat di bawah ikut lokasi majlis sebenar.
+            -->
+            <p class="alamat-lokasi animate-on-scroll">
+                Dewan Bunga Lili<br>
+                Jln Pulau Lumut R U10/68,<br>
+                Alam Budiman,<br>
+                40170 Shah Alam, Selangor
+            </p>
+
+            <!--
+                Gantikan href di bawah dengan link
+                Google Maps sebenar lokasi majlis.
+                Link ini boleh diedit bila-bila masa —
+                cuma tukar nilai href sahaja.
+
+                Kedudukan button ini boleh dilaraskan
+                dengan menukar nilai translate(x, y)
+                pada class .lokasi-wrapper di bahagian CSS.
+            -->
+
+            <div class="lokasi-wrapper">
+
+                <a
+                    id="lokasiButton"
+                    class="lokasi-button"
+                    href="https://maps.app.goo.gl/tAzsQ5yuBDpfAvQ2A"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    LOKASI MAJLIS
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         6. NOMBOR UNTUK DIHUBUNGI
+
+         5 slot (Nama + Call + WhatsApp) — semua boleh
+         diedit terus dalam HTML di bawah:
+
+         - "value" pada input nama = paparan nama
+         - href="tel:..." = nombor yang akan didail
+         - href="https://wa.me/..." = link WhatsApp
+           (boleh guna format wasap.my juga kalau nak,
+           contoh: https://wasap.my/601162690679)
+
+         Background video tetap (fixed), dibungkus glass box.
+         ========================================================= -->
+
+    <section id="nombor-dihubungi">
+
+        <div class="section-content glass-box">
+
+            <h2 class="animate-on-scroll">
+                Nombor Untuk Dihubungi
+            </h2>
+
+            <div class="kenalan-list">
+
+                <!-- Kenalan 1 -->
+                <div class="kenalan-item animate-on-scroll">
+                    <p class="kenalan-nama">Abang</p>
+                    <div class="kenalan-actions">
+                        <a class="kenalan-button" href="tel:+601162690679">
+                            Call
+                        </a>
+                        <a class="kenalan-button" href="https://wa.me/601162690679" target="_blank" rel="noopener">
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kenalan 2 -->
+                <div class="kenalan-item animate-on-scroll">
+                    <p class="kenalan-nama">Nama Kenalan 2</p>
+                    <div class="kenalan-actions">
+                        <a class="kenalan-button" href="tel:+60123456782">
+                            Call
+                        </a>
+                        <a class="kenalan-button" href="https://wa.me/60123456782" target="_blank" rel="noopener">
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kenalan 3 -->
+                <div class="kenalan-item animate-on-scroll">
+                    <p class="kenalan-nama">Nama Kenalan 3</p>
+                    <div class="kenalan-actions">
+                        <a class="kenalan-button" href="tel:+60123456783">
+                            Call
+                        </a>
+                        <a class="kenalan-button" href="https://wa.me/60123456783" target="_blank" rel="noopener">
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kenalan 4 -->
+                <div class="kenalan-item animate-on-scroll">
+                    <p class="kenalan-nama">Nama Kenalan 4</p>
+                    <div class="kenalan-actions">
+                        <a class="kenalan-button" href="tel:+60123456784">
+                            Call
+                        </a>
+                        <a class="kenalan-button" href="https://wa.me/60123456784" target="_blank" rel="noopener">
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kenalan 5 -->
+                <div class="kenalan-item animate-on-scroll">
+                    <p class="kenalan-nama">Nama Kenalan 5</p>
+                    <div class="kenalan-actions">
+                        <a class="kenalan-button" href="tel:+60123456785">
+                            Call
+                        </a>
+                        <a class="kenalan-button" href="https://wa.me/60123456785" target="_blank" rel="noopener">
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         7. RSVP
+
+         Struktur form sudah disediakan.
+
+         Untuk sambungan sebenar:
+         Google Apps Script Web App boleh digunakan.
+
+         Background video tetap (fixed), dibungkus glass box.
+         ========================================================= -->
+
+    <section id="rsvp">
+
+        <div class="section-content glass-box">
+
+            <h2>RSVP</h2>
+
+
+            <form
+                id="rsvpForm"
+                class="rsvp-form"
+            >
+
+                <!-- Nama Penuh -->
+
+                <div>
+
+                    <label for="nama">
+                        Nama Penuh
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Nombor Telefon -->
+
+                <div>
+
+                    <label for="telefon">
+                        No. Telefon
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefon"
+                        name="telefon"
+                    >
+
+                </div>
+
+
+                <!-- Kehadiran -->
+
+                <div>
+
+                    <label for="kehadiran">
+                        Kehadiran
+                    </label>
+
+                    <select
+                        id="kehadiran"
+                        name="kehadiran"
+                        required
+                    >
+
+                        <option value="">
+                            Sila pilih
+                        </option>
+
+                        <option value="Hadir">
+                            Hadir
+                        </option>
+
+                        <option value="Tidak Hadir">
+                            Tidak Hadir
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!--
+                    Jumlah Tetamu
+
+                    Hanya akan muncul jika:
+                    Kehadiran = Hadir
+                -->
+
+                <div id="jumlahTetamuContainer">
+
+                    <label for="jumlahTetamu">
+                        Jumlah Tetamu
+                    </label>
+
+                    <input
+                        type="number"
+                        id="jumlahTetamu"
+                        name="jumlahTetamu"
+                        min="1"
+                        max="5"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <!-- Ucapan -->
+
+                <div>
+
+                    <label for="ucapan">
+                        Ucapan
+                    </label>
+
+                    <textarea
+                        id="ucapan"
+                        name="ucapan"
+                        placeholder="Tulis ucapan anda..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button type="submit">
+                    Hantar RSVP
+                </button>
+
+            </form>
+
+
+            <!-- Status RSVP -->
+
+            <p
+                id="rsvpStatus"
+                style="margin-top: 20px;"
+            ></p>
+
+
+            <!-- Admin (teks sahaja, bukan button) -->
+
+            <p
+                id="adminLink"
+                class="admin-link"
+            >
+                Admin
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         8. SENARAI UCAPAN
+         Memaparkan ucapan yang telah dihantar oleh tetamu.
+
+         PENTING:
+         Untuk paparkan ucapan sebenar, Google Apps Script
+         perlu ada fungsi doGet() yang pulangkan senarai
+         ucapan dalam format JSON, contoh:
+
+         [
+           { "nama": "Ahmad", "ucapan": "Tahniah!" }
+         ]
+
+         Fungsi fetchUcapan() di bahagian JavaScript akan
+         memanggil GOOGLE_SCRIPT_URL yang sama secara GET
+         untuk ambil senarai ini.
+         ========================================================= -->
+
+    <section id="senarai-ucapan">
+
+        <div class="section-content glass-box">
+
+            <!-- Tajuk, di atas box statistik -->
+
+            <h2>
+                Ucapan dan Doa
+            </h2>
+
+
+            <!-- Statistik Kehadiran (Hadir sahaja) -->
+
+            <div
+                id="statistikHadir"
+                class="statistik-hadir jarak-statistik-ucapan"
+            >
+
+                <div class="statistik-item">
+                    <span
+                        id="jumlahHadir"
+                        class="statistik-angka"
+                    >
+                        0
+                    </span>
+                    <span class="statistik-label">
+                        Hadir
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- Senarai Ucapan (auto scroll) -->
+
+            <div
+                id="senaraiUcapanList"
+                class="ucapan-list"
+            >
+
+                <p class="ucapan-kosong">
+                    Menanti ucapan daripada tetamu...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         9. SALAM KAUT
+
+         Background video tetap (fixed), dibungkus glass box.
+         ========================================================= -->
+
+    <section id="gift">
+
+        <div class="section-content glass-box">
+
+            <p>
+                Kehadiran anda di majlis perkahwinan kami
+                merupakan hadiah terindah yang tidak ternilai
+                buat kami. Melihat senyuman anda, merasai doa
+                restu yang dipanjatkan, serta berkongsi detik
+                bermakna ini bersama anda adalah satu keberkatan
+                yang akan kami kenang sepanjang hayat.
+            </p>
+
+            <br>
+
+            <p>
+                Jika ada secebis rasa kasih dan ingatan
+                yang ingin disampaikan sempena hari bahagia
+                kami, kami amat menghargainya. Sebagai tanda
+                kenangan, kami sertakan butiran di bawah
+                buat yang ingin berkongsi seikhlas hati.
+            </p>
+
+            <br>
+
+            <button
+                type="button"
+                id="salamKautButton"
+            >
+                Salam Kasih
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         MODAL SALAM KAUT
+         Papar QR kod bank dan butang salin nombor akaun.
+
+         Gantikan src imej di bawah dengan QR kod bank
+         sebenar (contoh: qr-bank.png).
+         ========================================================= -->
+
+    <div
+        id="salamKautModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-content">
+
+            <button
+                type="button"
+                id="closeSalamKautModal"
+                class="modal-close"
+                aria-label="Tutup"
+            >
+                &times;
+            </button>
+
+            <h3>Salam Kasih</h3>
+
+            <img
+                src="qr-bank.png"
+                alt="QR Kod Bank"
+                class="qr-image"
+            >
+
+            <!--
+                Medan di bawah boleh diedit terus.
+                Nilai "value" ialah paparan lalai —
+                tukar terus di sini ikut bank sebenar.
+            -->
+
+            <div class="bank-edit-fields">
+
+                <div>
+                    <label for="modalAccountHolder">
+                        Nama
+                    </label>
+                    <input
+                        type="text"
+                        id="modalAccountHolder"
+                        value="Atelier Dhia"
+                    >
+                </div>
+
+                <div>
+                    <label for="modalAccountNumber">
+                        No. Akaun
+                    </label>
+                    <div class="account-copy-row">
+
+                        <input
+                            type="text"
+                            id="modalAccountNumber"
+                            value="1620 5234 1564 1224"
+                        >
+
+                        <button
+                            type="button"
+                            id="copyAccountButton"
+                        >
+                            Salin
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <p id="copyStatus"></p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         MODAL ADMIN LOGIN
+
+         Username: admin
+         Password: admin1234
+
+         NOTA KESELAMATAN:
+         Login ini semakan ringkas di browser sahaja (client-side),
+         BUKAN keselamatan sebenar — sesiapa yang tengok punca
+         kod (view-source) website ini boleh nampak username/
+         password. Sesuai untuk kegunaan santai/dalaman sahaja,
+         bukan untuk data sulit.
+         ========================================================= -->
+
+    <div
+        id="adminLoginModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-content">
+
+            <button
+                type="button"
+                id="closeAdminLoginModal"
+                class="modal-close"
+                aria-label="Tutup"
+            >
+                &times;
+            </button>
+
+            <h3>Admin Login</h3>
+
+            <div class="bank-edit-fields">
+
+                <div>
+                    <label for="adminUsername">
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        id="adminUsername"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div>
+                    <label for="adminPassword">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        autocomplete="off"
+                    >
+                </div>
+
+            </div>
+
+            <p
+                id="adminLoginError"
+                class="admin-error"
+            ></p>
+
+            <br>
+
+            <button
+                type="button"
+                id="adminLoginButton"
+            >
+                Log Masuk
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         MODAL ADMIN PANEL
+
+         Untuk edit RSVP (nama/kehadiran/jumlah tetamu),
+         padam ucapan palsu, dan tetapkan kuota tetamu.
+         ========================================================= -->
+
+    <div
+        id="adminPanelModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-content admin-modal-content">
+
+            <button
+                type="button"
+                id="closeAdminPanelModal"
+                class="modal-close"
+                aria-label="Tutup"
+            >
+                &times;
+            </button>
+
+            <h3>Admin Panel</h3>
+
+
+            <!-- Kuota Tetamu -->
+
+            <div class="admin-section">
+
+                <h4>Kuota Tetamu</h4>
+
+                <div class="kuota-row">
+
+                    <input
+                        type="number"
+                        id="kuotaInput"
+                        min="0"
+                        placeholder="Contoh: 200"
+                    >
+
+                    <button
+                        type="button"
+                        id="simpanKuotaButton"
+                    >
+                        Simpan
+                    </button>
+
+                </div>
+
+                <p
+                    id="kuotaStatus"
+                    class="admin-success"
+                ></p>
+
+                <!--
+                    Baki kuota — dikira secara automatik:
+                    Kuota tetamu tolak jumlah tetamu yang
+                    dah confirm "Hadir" (jumlahTetamu
+                    dijumlahkan daripada semua RSVP).
+                -->
+                <p id="bakiKuotaText" class="baki-kuota-text"></p>
+
+            </div>
+
+
+            <!-- Senarai RSVP -->
+
+            <div class="admin-section">
+
+                <h4>Senarai RSVP</h4>
+
+                <button
+                    type="button"
+                    id="refreshAdminListButton"
+                >
+                    Muat Semula
+                </button>
+
+                <div
+                    id="adminRsvpList"
+                    class="rsvp-admin-list"
+                >
+                    <p>Memuatkan...</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         10. CLOSING (DOA)
+
+         Background video tetap (fixed), dibungkus glass box.
+         ========================================================= -->
+
+    <section id="closing">
+
+        <div class="section-content doa-content glass-box">
+
+            <p class="jawi-text">
+                بِسْمِ ٱللّٰهِ ٱلرَّحْمٰنِ ٱلرَّحِيمِ
+            </p>
+
+            <p class="doa-terjemahan">
+                “Dengan nama Allah Yang Maha Pemurah
+                lagi Maha Penyayang”
+            </p>
+
+            <p class="doa-text">
+                " Ya Allah, Ya Rahman, Ya Rahim,
+                Kami memohon kepada-Mu, Ya Allah,
+                berkatilah ikatan suci antara dua
+                hamba-Mu. Tumbuhkanlah dalam hati
+                mereka cinta yang abadi, kasih sayang
+                yang tidak pernah luntur, dan kesetiaan
+                yang kukuh hingga ke akhir hayat mereka."
+            </p>
+
+            <p class="doa-text">
+                “Jadikanlah mereka dalam kalangan orang
+                yang saling mencintai kerana-Mu, yang
+                menjaga maruah satu sama lain sama ada
+                ketika bersama mahupun berjauhan, yang
+                menjadi penenang antara satu sama lain,
+                dan yang saling mengingatkan antara satu
+                sama lain kepada-Mu saat leka dan lalai”
+            </p>
+
+            <p class="doa-text">
+                “Ya Allah, lindungilah mereka daripada
+                ujian yang melemahkan hati, daripada
+                bisikan yang memecahbelahkan, dan
+                daripada takdir yang membawa kesedihan.
+                Kurniakanlah kepada mereka kehidupan
+                yang diberkati dan penuh ketenangan,
+                rezeki yang halal, mencukupi dan penuh
+                keberkatan, serta zuriat yang soleh dan
+                solehah, penyejuk mata dan penawar
+                hati mereka”
+            </p>
+
+            <p class="doa-text">
+                “Ya Allah, andai satu hari mereka
+                berasa letih, jadikanlah cinta mereka
+                sumber kekuatan. Andai satu hari
+                ikatan mereka diuji, ingatkanlah
+                mereka akan hikmah di sebalik
+                penyatuan ini, dan bahawa pernikahan
+                ini bukan sekadar untuk dunia, tetapi
+                sebuah perjalanan menuju kebersamaan
+                abadi di syurga-Mu”
+            </p>
+
+            <p class="doa-text">
+                “Jadikanlah perkahwinan ini sebagai
+                jalan untuk meraih reda-Mu, perisai
+                daripada dosa, dan laluan menuju
+                rahmat-Mu. Jadikanlah cinta ini cinta
+                terakhir mereka di dunia ini, sehingga
+                Engkau pertemukan kembali mereka di
+                syurga tertinggi, Jannatul Firdaus”
+            </p>
+
+            <p class="doa-penutup">
+                Amin Ya Rabbal ‘Alamiin
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         11. PENUTUP
+
+         Section terakhir. Background video tetap (fixed), dibungkus
+         glass box.
+         ========================================================= -->
+
+    <section id="penutup">
+
+        <div class="section-content glass-box">
+
+            <p class="animate-on-scroll">
+                Dengan Penuh Kasih,
+            </p>
+
+            <p class="animate-on-scroll" id="namaPengantinLelaki">
+                Andy
+            </p>
+
+            <p class="animate-on-scroll">
+                &amp;
+            </p>
+
+            <p class="animate-on-scroll" id="namaPengantinPerempuan">
+                Bunga
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         BOTTOM NAVIGATION
+         Navigasi berada di bawah tengah.
+
+         Ikon menggunakan fail SVG lokal.
+         ========================================================= -->
+
+    <nav class="bottom-navigation">
+
+        <!-- Home -->
+
+        <button
+            class="nav-button"
+            onclick="scrollToSection('cover')"
+            aria-label="Home"
+        >
+
+            <img
+                src="icons/home.svg"
+                alt="Home"
+            >
+
+            <span class="nav-label">Home</span>
+
+        </button>
+
+
+        <!-- Event -->
+
+        <button
+            class="nav-button"
+            onclick="scrollToSection('countdown-section')"
+            aria-label="Event"
+        >
+
+            <img
+                src="icons/calendar.svg"
+                alt="Event"
+            >
+
+            <span class="nav-label">Event</span>
+
+        </button>
+
+
+        <!-- Lokasi -->
+
+        <button
+            class="nav-button"
+            onclick="scrollToSection('informasi-acara')"
+            aria-label="Lokasi"
+        >
+
+            <img
+                src="icons/location.svg"
+                alt="Lokasi"
+            >
+
+            <span class="nav-label">Lokasi</span>
+
+        </button>
+
+
+        <!-- RSVP -->
+
+        <button
+            class="nav-button"
+            onclick="scrollToSection('rsvp')"
+            aria-label="RSVP"
+        >
+
+            <img
+                src="icons/rsvp.svg"
+                alt="RSVP"
+            >
+
+            <span class="nav-label">RSVP</span>
+
+        </button>
+
+
+        <!-- Gift -->
+
+        <button
+            class="nav-button"
+            onclick="scrollToSection('gift')"
+            aria-label="Gift"
+        >
+
+            <img
+                src="icons/gift.svg"
+                alt="Gift"
+            >
+
+            <span class="nav-label">Gift</span>
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         Semua JavaScript berada dalam fail index.html.
+         ========================================================= -->
+
+    <script>
+
+
+        /* =========================================================
+           1. AMBIL NAMA TETAMU DARIPADA URL
+
+           Contoh:
+
+           https://websiteanda.com/?to=Ahmad%20Dan%20Keluarga
+
+           Akan menghasilkan:
+
+           Ahmad Dan Keluarga
+           ========================================================= */
+
+        function getGuestName() {
+
+            const urlParams = new URLSearchParams(
+                window.location.search
+            );
+
+            const guestName =
+                urlParams.get("to");
+
+            if (guestName) {
+
+                const guestNameEl =
+                    document.getElementById(
+                        "guestName"
+                    );
+
+                if (guestNameEl) {
+
+                    guestNameEl.textContent = guestName;
+
+                }
+
+            }
+
+        }
+
+        getGuestName();
+
+
+
+        /* =========================================================
+           2. BUTANG BUKA UNDANGAN
+
+           Apabila ditekan:
+           - Scroll ke Opening
+           - Cuba memainkan muzik
+
+           Nota:
+           Browser biasanya tidak membenarkan
+           autoplay audio tanpa interaksi pengguna.
+           ========================================================= */
+
+        const openInvitation =
+            document.getElementById(
+                "openInvitation"
+            );
+
+        const backgroundMusic =
+            document.getElementById(
+                "backgroundMusic"
+            );
+
+
+        openInvitation.addEventListener(
+            "click",
+            function () {
+
+                backgroundMusic
+                    .play()
+                    .then(function () {
+
+                        document.getElementById(
+                            "musicButton"
+                        ).textContent = "❚❚";
+
+                    })
+                    .catch(function (error) {
+
+                        console.log(
+                            "Audio tidak dapat dimainkan:",
+                            error
+                        );
+
+                    });
+
+
+                scrollToSection("opening");
+
+            }
+        );
+
+
+
+        /* =========================================================
+           3. PLAY / PAUSE MUSIC
+           ========================================================= */
+
+        const musicButton =
+            document.getElementById(
+                "musicButton"
+            );
+
+
+        /*
+            Muzik button akan berpusing bila muzik betul-betul
+            main (dari mana-mana punca — button Buka Undangan
+            atau musicButton sendiri), dan berhenti pusing
+            bila muzik pause.
+        */
+
+        backgroundMusic.addEventListener(
+            "play",
+            function () {
+
+                musicButton.classList.add("sedang-main");
+
+            }
+        );
+
+        backgroundMusic.addEventListener(
+            "pause",
+            function () {
+
+                musicButton.classList.remove("sedang-main");
+
+            }
+        );
+
+
+        musicButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    backgroundMusic.paused
+                ) {
+
+                    backgroundMusic
+                        .play()
+                        .then(function () {
+
+                            musicButton.textContent =
+                                "❚❚";
+
+                        });
+
+                } else {
+
+                    backgroundMusic.pause();
+
+                    musicButton.textContent =
+                        "▶";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================================
+           4. COUNTDOWN
+
+           Tarikh & masa majlis diambil terus daripada
+           attribute data-mula / data-tamat pada
+           <div id="dataMajlis"> dalam HTML section
+           "Atur Cara Majlis".
+
+           Untuk tukar tarikh majlis, cari elemen tu dalam
+           HTML dan tukar nilai data-mula / data-tamat sahaja
+           — countdown dan button "Simpan Tarikh" akan
+           terus ikut automatik.
+
+           Jika acara sudah tamat:
+           "Acara telah selesai"
+           akan dipaparkan.
+           ========================================================= */
+
+        const dataMajlisEl =
+            document.getElementById("dataMajlis");
+
+        const eventDate =
+            new Date(
+                dataMajlisEl.dataset.mula
+            );
+
+        const eventEndDate =
+            new Date(
+                dataMajlisEl.dataset.tamat
+            );
+
+
+        /*
+            Alamat lokasi majlis (teks biasa, bukan link).
+            Digunakan pada button Simpan Tarikh (Google Calendar).
+        */
+
+        const LOKASI_TEKS =
+            "Dewan Bunga Lili U10 Alam Budiman, Shah Alam";
+
+
+        function updateCountdown() {
+
+            const now =
+                new Date();
+
+
+            const difference =
+                eventDate - now;
+
+
+            /* -----------------------------------------
+               Jika acara sudah selesai
+               ----------------------------------------- */
+
+            if (difference <= 0) {
+
+                document.getElementById(
+                    "days"
+                ).textContent = "0";
+
+                document.getElementById(
+                    "hours"
+                ).textContent = "0";
+
+                document.getElementById(
+                    "minutes"
+                ).textContent = "0";
+
+                document.getElementById(
+                    "seconds"
+                ).textContent = "0";
+
+
+                document.getElementById(
+                    "eventFinished"
+                ).style.display = "block";
+
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               Kiraan masa
+               ----------------------------------------- */
+
+            const days =
+                Math.floor(
+                    difference /
+                    (1000 * 60 * 60 * 24)
+                );
+
+
+            const hours =
+                Math.floor(
+                    (
+                        difference %
+                        (1000 * 60 * 60 * 24)
+                    ) /
+                    (1000 * 60 * 60)
+                );
+
+
+            const minutes =
+                Math.floor(
+                    (
+                        difference %
+                        (1000 * 60 * 60)
+                    ) /
+                    (1000 * 60)
+                );
+
+
+            const seconds =
+                Math.floor(
+                    (
+                        difference %
+                        (1000 * 60)
+                    ) /
+                    1000
+                );
+
+
+            document.getElementById(
+                "days"
+            ).textContent = days;
+
+
+            document.getElementById(
+                "hours"
+            ).textContent = hours;
+
+
+            document.getElementById(
+                "minutes"
+            ).textContent = minutes;
+
+
+            document.getElementById(
+                "seconds"
+            ).textContent = seconds;
+
+        }
+
+
+        updateCountdown();
+
+
+        /*
+            Update countdown setiap 1 saat.
+        */
+
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+
+
+        /* =========================================================
+           4c. BUTTON SIMPAN TARIKH -> GOOGLE CALENDAR
+
+           Bila diklik, buka Google Calendar dengan
+           hari, tarikh, masa dan lokasi majlis
+           yang sudah diisi automatik.
+           ========================================================= */
+
+        function formatTarikhGoogleCalendar(tarikh) {
+
+            return tarikh
+                .toISOString()
+                .replace(/[-:]/g, "")
+                .split(".")[0] + "Z";
+
+        }
+
+
+        const simpanTarikhButton =
+            document.getElementById(
+                "simpanTarikhButton"
+            );
+
+
+        simpanTarikhButton.addEventListener(
+            "click",
+            function () {
+
+                const mula =
+                    formatTarikhGoogleCalendar(
+                        eventDate
+                    );
+
+                const tamat =
+                    formatTarikhGoogleCalendar(
+                        eventEndDate
+                    );
+
+                const url =
+                    "https://www.google.com/calendar/render" +
+                    "?action=TEMPLATE" +
+                    "&text=" + encodeURIComponent("Majlis Perkahwinan") +
+                    "&dates=" + mula + "/" + tamat +
+                    "&details=" + encodeURIComponent(
+                        "Jemputan menghadiri majlis perkahwinan kami."
+                    ) +
+                    "&location=" + encodeURIComponent(
+                        LOKASI_TEKS
+                    );
+
+                window.open(url, "_blank");
+
+            }
+        );
+
+
+
+        /* =========================================================
+           5. RSVP — PAPARKAN JUMLAH TETAMU
+
+           Jika pilih:
+
+           Hadir
+           → Jumlah Tetamu muncul
+
+           Tidak Hadir
+           → Jumlah Tetamu disembunyikan
+           ========================================================= */
+
+        const kehadiran =
+            document.getElementById(
+                "kehadiran"
+            );
+
+
+        const jumlahTetamuContainer =
+            document.getElementById(
+                "jumlahTetamuContainer"
+            );
+
+
+        const jumlahTetamu =
+            document.getElementById(
+                "jumlahTetamu"
+            );
+
+
+        kehadiran.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    this.value === "Hadir"
+                ) {
+
+                    jumlahTetamuContainer
+                        .style.display = "block";
+
+                    jumlahTetamu.required =
+                        true;
+
+                } else {
+
+                    jumlahTetamuContainer
+                        .style.display = "none";
+
+                    jumlahTetamu.required =
+                        false;
+
+                    jumlahTetamu.value = "1";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================================
+           7. RSVP — HANTAR DATA KE GOOGLE SHEET
+
+           PENTING — CARA SAMBUNGKAN GOOGLE SHEET:
+
+           1. Buka Google Sheet ni:
+              https://docs.google.com/spreadsheets/d/1tNHRjDgqCSajtM6IvwMckXZEVNUxWvI04bMUUJzWkX0/edit
+
+           2. Pergi ke Extensions > Apps Script.
+
+           3. Padam kod default, tampal kod Apps Script
+              (doPost + doGet) yang disediakan berasingan.
+
+           4. Deploy > New deployment > pilih jenis
+              "Web app". Execute as: Me.
+              Who has access: Anyone.
+
+           5. Klik Deploy, benarkan kebenaran (authorize).
+
+           6. Salin URL Web App yang terhasil
+              (URL akan berakhir dengan /exec).
+
+           7. Gantikan nilai GOOGLE_SCRIPT_URL di bawah
+              dengan URL /exec tersebut.
+
+           Selepas tu, RSVP, senarai ucapan dan statistik
+           hadir akan terus berfungsi automatik.
+           ========================================================= */
+
+        const GOOGLE_SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbyhONr65MVmnlFTKyAdj_lHkYh8HYasmFo3R8KVTbfHnQQjFZ-z2l8ZMDyCnpuiEx_x/exec";
+
+
+        const rsvpForm =
+            document.getElementById(
+                "rsvpForm"
+            );
+
+
+        const rsvpStatus =
+            document.getElementById(
+                "rsvpStatus"
+            );
+
+
+        rsvpForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                /*
+                    Ambil semua data daripada form.
+                */
+
+                const formData =
+                    new FormData(
+                        rsvpForm
+                    );
+
+
+                const data = {
+
+                    nama:
+                        formData.get("nama"),
+
+                    telefon:
+                        formData.get("telefon"),
+
+                    kehadiran:
+                        formData.get("kehadiran"),
+
+                    jumlahTetamu:
+                        formData.get(
+                            "jumlahTetamu"
+                        ),
+
+                    ucapan:
+                        formData.get("ucapan")
+
+                };
+
+
+                /*
+                    Hantar data ke Google Apps Script.
+                */
+
+                try {
+
+                    rsvpStatus.textContent =
+                        "Sedang menghantar...";
+
+
+                    await fetch(
+                        GOOGLE_SCRIPT_URL,
+                        {
+
+                            method: "POST",
+
+                            mode: "no-cors",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(data)
+
+                        }
+                    );
+
+
+                    rsvpStatus.textContent =
+                        "RSVP berjaya dihantar.";
+
+
+                    rsvpForm.reset();
+
+
+                    jumlahTetamuContainer
+                        .style.display = "none";
+
+
+                    /*
+                        Refresh senarai ucapan & statistik
+                        selepas RSVP berjaya dihantar.
+                        Delay sedikit supaya Google Sheet
+                        sempat kemas kini data.
+                    */
+
+                    setTimeout(
+                        fetchUcapan,
+                        1500
+                    );
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    rsvpStatus.textContent =
+                        "Maaf, berlaku masalah. Sila cuba lagi.";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================================
+           6b. SALAM KAUT — BUKA / TUTUP MODAL & SALIN AKAUN
+           ========================================================= */
+
+        const salamKautButton =
+            document.getElementById(
+                "salamKautButton"
+            );
+
+        const salamKautModal =
+            document.getElementById(
+                "salamKautModal"
+            );
+
+        const closeSalamKautModal =
+            document.getElementById(
+                "closeSalamKautModal"
+            );
+
+        const copyAccountButton =
+            document.getElementById(
+                "copyAccountButton"
+            );
+
+        const copyStatus =
+            document.getElementById(
+                "copyStatus"
+            );
+
+
+        salamKautButton.addEventListener(
+            "click",
+            function () {
+
+                salamKautModal.classList.add(
+                    "active"
+                );
+
+            }
+        );
+
+
+        closeSalamKautModal.addEventListener(
+            "click",
+            function () {
+
+                salamKautModal.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+        /*
+            Tutup modal jika klik di luar
+            kandungan modal.
+        */
+
+        salamKautModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (event.target === salamKautModal) {
+
+                    salamKautModal.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+
+        copyAccountButton.addEventListener(
+            "click",
+            async function () {
+
+                const accountNumber =
+                    document.getElementById(
+                        "modalAccountNumber"
+                    ).value.trim();
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        accountNumber
+                    );
+
+                    copyStatus.textContent =
+                        "Nombor akaun disalin.";
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    copyStatus.textContent =
+                        "Maaf, gagal menyalin. Sila salin secara manual.";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================================
+           6c2. ADMIN — LOGIN & PANEL
+
+           NOTA:
+           Semakan username/password ini berlaku di browser
+           (client-side) DAN di Google Apps Script (server-side)
+           setiap kali admin buat sebarang perubahan.
+
+           Ini perlindungan asas sahaja, bukan keselamatan
+           tahap tinggi — sesiapa yang buka "view source" boleh
+           nampak username/password ni. Sesuai untuk kegunaan
+           santai/dalaman (contoh: kau sendiri semak/edit RSVP),
+           bukan untuk simpan data sensitif.
+
+           Untuk tukar username/password:
+           cari ADMIN_USERNAME dan ADMIN_PASSWORD di bawah,
+           DAN tukar juga nilai yang sama dalam Kod Apps Script
+           (Code.gs) supaya kedua-dua belah sepadan.
+           ========================================================= */
+
+        const ADMIN_USERNAME = "admin";
+        const ADMIN_PASSWORD = "admin1234";
+
+        let sesiAdminUsername = "";
+        let sesiAdminPassword = "";
+
+
+        const adminLink =
+            document.getElementById("adminLink");
+
+        const adminLoginModal =
+            document.getElementById("adminLoginModal");
+
+        const closeAdminLoginModal =
+            document.getElementById("closeAdminLoginModal");
+
+        const adminUsernameInput =
+            document.getElementById("adminUsername");
+
+        const adminPasswordInput =
+            document.getElementById("adminPassword");
+
+        const adminLoginError =
+            document.getElementById("adminLoginError");
+
+        const adminLoginButton =
+            document.getElementById("adminLoginButton");
+
+        const adminPanelModal =
+            document.getElementById("adminPanelModal");
+
+        const closeAdminPanelModal =
+            document.getElementById("closeAdminPanelModal");
+
+        const kuotaInput =
+            document.getElementById("kuotaInput");
+
+        const kuotaStatus =
+            document.getElementById("kuotaStatus");
+
+        const bakiKuotaText =
+            document.getElementById("bakiKuotaText");
+
+
+        /*
+            Kira & papar baki kuota tetamu.
+
+            Baki = Kuota tetapan admin - jumlah tetamu
+            yang confirm "Hadir" (dikira daripada
+            jumlahTetamu setiap RSVP).
+        */
+        function kemaskiniBakiKuota(senarai) {
+
+            const kuota =
+                parseInt(kuotaInput.value, 10);
+
+            if (!kuota && kuota !== 0) {
+
+                bakiKuotaText.textContent = "";
+
+                return;
+
+            }
+
+            let jumlahHadir = 0;
+
+            (senarai || []).forEach(function (item) {
+
+                if (item.kehadiran === "Hadir") {
+
+                    jumlahHadir +=
+                        parseInt(item.jumlahTetamu, 10) || 1;
+
+                }
+
+            });
+
+            const baki = kuota - jumlahHadir;
+
+            bakiKuotaText.textContent =
+                "Baki kuota: " + baki +
+                " (daripada " + kuota +
+                ", " + jumlahHadir + " dah confirm hadir)";
+
+        }
+
+        const simpanKuotaButton =
+            document.getElementById("simpanKuotaButton");
+
+        const adminRsvpList =
+            document.getElementById("adminRsvpList");
+
+        const refreshAdminListButton =
+            document.getElementById("refreshAdminListButton");
+
+
+        adminLink.addEventListener(
+            "click",
+            function () {
+
+                adminLoginError.textContent = "";
+                adminUsernameInput.value = "";
+                adminPasswordInput.value = "";
+
+                adminLoginModal.classList.add("active");
+
+            }
+        );
+
+
+        closeAdminLoginModal.addEventListener(
+            "click",
+            function () {
+
+                adminLoginModal.classList.remove("active");
+
+            }
+        );
+
+
+        adminLoginModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (event.target === adminLoginModal) {
+
+                    adminLoginModal.classList.remove("active");
+
+                }
+
+            }
+        );
+
+
+        closeAdminPanelModal.addEventListener(
+            "click",
+            function () {
+
+                adminPanelModal.classList.remove("active");
+
+            }
+        );
+
+
+        adminPanelModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (event.target === adminPanelModal) {
+
+                    adminPanelModal.classList.remove("active");
+
+                }
+
+            }
+        );
+
+
+        adminLoginButton.addEventListener(
+            "click",
+            function () {
+
+                const usernameDimasukkan =
+                    adminUsernameInput.value.trim();
+
+                const passwordDimasukkan =
+                    adminPasswordInput.value.trim();
+
+                if (
+                    usernameDimasukkan === ADMIN_USERNAME &&
+                    passwordDimasukkan === ADMIN_PASSWORD
+                ) {
+
+                    sesiAdminUsername = usernameDimasukkan;
+                    sesiAdminPassword = passwordDimasukkan;
+
+                    adminLoginModal.classList.remove("active");
+
+                    adminPanelModal.classList.add("active");
+
+                    muatSemulaAdminPanel();
+
+                } else {
+
+                    adminLoginError.textContent =
+                        "Username atau password salah.";
+
+                }
+
+            }
+        );
+
+
+        /*
+            Muatkan kuota semasa dan senarai RSVP
+            terus dari Google Sheet (melalui Apps Script).
+        */
+
+        async function muatSemulaAdminPanel() {
+
+            kuotaStatus.textContent = "";
+
+            adminRsvpList.innerHTML =
+                "<p>Memuatkan...</p>";
+
+            try {
+
+                const responKuota =
+                    await fetch(
+                        GOOGLE_SCRIPT_URL +
+                        "?action=getKuota" +
+                        "&username=" + encodeURIComponent(sesiAdminUsername) +
+                        "&password=" + encodeURIComponent(sesiAdminPassword)
+                    );
+
+                const dataKuota =
+                    await responKuota.json();
+
+                kuotaInput.value =
+                    dataKuota.kuota || "";
+
+            } catch (error) {
+
+                console.log(
+                    "Tidak dapat ambil kuota:",
+                    error
+                );
+
+            }
+
+
+            try {
+
+                const responSenarai =
+                    await fetch(
+                        GOOGLE_SCRIPT_URL +
+                        "?action=adminList" +
+                        "&username=" + encodeURIComponent(sesiAdminUsername) +
+                        "&password=" + encodeURIComponent(sesiAdminPassword)
+                    );
+
+                const senarai =
+                    await responSenarai.json();
+
+                paparSenaraiAdmin(senarai);
+
+                kemaskiniBakiKuota(senarai);
+
+            } catch (error) {
+
+                console.log(
+                    "Tidak dapat ambil senarai RSVP:",
+                    error
+                );
+
+                adminRsvpList.innerHTML =
+                    "<p>Gagal memuatkan senarai RSVP.</p>";
+
+            }
+
+        }
+
+
+        function paparSenaraiAdmin(senarai) {
+
+            adminRsvpList.innerHTML = "";
+
+            if (!senarai || senarai.length === 0) {
+
+                adminRsvpList.innerHTML =
+                    "<p>Tiada RSVP setakat ini.</p>";
+
+                return;
+
+            }
+
+            senarai.forEach(function (item) {
+
+                const div =
+                    document.createElement("div");
+
+                div.className = "rsvp-admin-item";
+
+
+                /* -----------------------------------------
+                   PAPARAN (VIEW) — lalai
+                   ----------------------------------------- */
+
+                const paparan =
+                    document.createElement("div");
+
+                const paparanNama =
+                    document.createElement("p");
+
+                paparanNama.innerHTML =
+                    "<strong>" +
+                    (item.nama || "Tetamu") +
+                    "</strong> — " +
+                    (item.kehadiran || "-") +
+                    " (" +
+                    (item.jumlahTetamu || "1") +
+                    " org)";
+
+                paparan.appendChild(paparanNama);
+
+                if (item.ucapan) {
+
+                    const paparanUcapan =
+                        document.createElement("p");
+
+                    paparanUcapan.className =
+                        "rsvp-admin-ucapan";
+
+                    paparanUcapan.textContent =
+                        "\u201C" + item.ucapan + "\u201D";
+
+                    paparan.appendChild(paparanUcapan);
+
+                }
+
+
+                /* -----------------------------------------
+                   MOD EDIT — disembunyikan sehingga
+                   button "Edit" ditekan
+                   ----------------------------------------- */
+
+                const editWrap =
+                    document.createElement("div");
+
+                editWrap.style.display = "none";
+
+
+                const namaLabel =
+                    document.createElement("label");
+
+                namaLabel.textContent = "Nama";
+
+                const namaInput =
+                    document.createElement("input");
+
+                namaInput.type = "text";
+                namaInput.value = item.nama || "";
+
+
+                const kehadiranLabel =
+                    document.createElement("label");
+
+                kehadiranLabel.textContent = "Kehadiran";
+
+                const kehadiranSelect =
+                    document.createElement("select");
+
+                ["Hadir", "Tidak Hadir"].forEach(
+                    function (pilihan) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = pilihan;
+                        option.textContent = pilihan;
+
+                        if (item.kehadiran === pilihan) {
+
+                            option.selected = true;
+
+                        }
+
+                        kehadiranSelect.appendChild(option);
+
+                    }
+                );
+
+
+                const jumlahLabel =
+                    document.createElement("label");
+
+                jumlahLabel.textContent = "Jumlah Tetamu";
+
+                const jumlahInput =
+                    document.createElement("input");
+
+                jumlahInput.type = "number";
+                jumlahInput.min = "1";
+                jumlahInput.value = item.jumlahTetamu || "1";
+
+
+                const ucapanLabel =
+                    document.createElement("label");
+
+                ucapanLabel.textContent = "Ucapan";
+
+                const ucapanTextarea =
+                    document.createElement("textarea");
+
+                ucapanTextarea.rows = 3;
+                ucapanTextarea.value = item.ucapan || "";
+
+
+                const simpanButton =
+                    document.createElement("button");
+
+                simpanButton.type = "button";
+                simpanButton.textContent = "Simpan";
+
+                const batalButton =
+                    document.createElement("button");
+
+                batalButton.type = "button";
+                batalButton.textContent = "Batal";
+
+                const editActions =
+                    document.createElement("div");
+
+                editActions.className = "rsvp-admin-actions";
+
+                editActions.appendChild(simpanButton);
+                editActions.appendChild(batalButton);
+
+                editWrap.appendChild(namaLabel);
+                editWrap.appendChild(namaInput);
+                editWrap.appendChild(kehadiranLabel);
+                editWrap.appendChild(kehadiranSelect);
+                editWrap.appendChild(jumlahLabel);
+                editWrap.appendChild(jumlahInput);
+                editWrap.appendChild(ucapanLabel);
+                editWrap.appendChild(ucapanTextarea);
+                editWrap.appendChild(editActions);
+
+
+                /* -----------------------------------------
+                   BUTTON UTAMA — Edit & Padam
+                   ----------------------------------------- */
+
+                const actions =
+                    document.createElement("div");
+
+                actions.className = "rsvp-admin-actions";
+
+                const editButton =
+                    document.createElement("button");
+
+                editButton.type = "button";
+                editButton.textContent = "Edit";
+
+                const padamButton =
+                    document.createElement("button");
+
+                padamButton.type = "button";
+                padamButton.textContent = "Padam";
+
+                actions.appendChild(editButton);
+                actions.appendChild(padamButton);
+
+
+                const statusEl =
+                    document.createElement("p");
+
+                statusEl.className = "rsvp-admin-status";
+
+
+                editButton.addEventListener(
+                    "click",
+                    function () {
+
+                        paparan.style.display = "none";
+                        actions.style.display = "none";
+                        editWrap.style.display = "block";
+
+                    }
+                );
+
+
+                batalButton.addEventListener(
+                    "click",
+                    function () {
+
+                        namaInput.value = item.nama || "";
+                        kehadiranSelect.value = item.kehadiran || "Hadir";
+                        jumlahInput.value = item.jumlahTetamu || "1";
+                        ucapanTextarea.value = item.ucapan || "";
+
+                        editWrap.style.display = "none";
+                        paparan.style.display = "block";
+                        actions.style.display = "flex";
+
+                    }
+                );
+
+
+                simpanButton.addEventListener(
+                    "click",
+                    async function () {
+
+                        statusEl.textContent =
+                            "Menyimpan...";
+
+                        try {
+
+                            const respon =
+                                await fetch(
+                                    GOOGLE_SCRIPT_URL,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type":
+                                                "text/plain;charset=utf-8"
+                                        },
+                                        body: JSON.stringify({
+                                            action: "adminUpdate",
+                                            username: sesiAdminUsername,
+                                            password: sesiAdminPassword,
+                                            row: item.row,
+                                            nama: namaInput.value,
+                                            kehadiran: kehadiranSelect.value,
+                                            jumlahTetamu: jumlahInput.value,
+                                            ucapan: ucapanTextarea.value
+                                        })
+                                    }
+                                );
+
+                            const hasil =
+                                await respon.json();
+
+                            if (hasil.status === "success") {
+
+                                statusEl.textContent =
+                                    "Berjaya disimpan.";
+
+                                item.nama = namaInput.value;
+                                item.kehadiran = kehadiranSelect.value;
+                                item.jumlahTetamu = jumlahInput.value;
+                                item.ucapan = ucapanTextarea.value;
+
+                                paparanNama.innerHTML =
+                                    "<strong>" +
+                                    (item.nama || "Tetamu") +
+                                    "</strong> — " +
+                                    (item.kehadiran || "-") +
+                                    " (" +
+                                    (item.jumlahTetamu || "1") +
+                                    " org)";
+
+                                editWrap.style.display = "none";
+                                paparan.style.display = "block";
+                                actions.style.display = "flex";
+
+                                fetchUcapan();
+
+                            } else {
+
+                                statusEl.textContent =
+                                    "Gagal menyimpan.";
+
+                            }
+
+                        } catch (error) {
+
+                            console.error(error);
+
+                            statusEl.textContent =
+                                "Ralat rangkaian. Sila cuba lagi.";
+
+                        }
+
+                    }
+                );
+
+
+                padamButton.addEventListener(
+                    "click",
+                    async function () {
+
+                        const sahkan =
+                            window.confirm(
+                                "Padam RSVP " +
+                                (item.nama || "tetamu ini") +
+                                "? Tindakan ini tidak boleh dibatalkan."
+                            );
+
+                        if (!sahkan) {
+
+                            return;
+
+                        }
+
+                        statusEl.textContent =
+                            "Memadam...";
+
+                        try {
+
+                            const respon =
+                                await fetch(
+                                    GOOGLE_SCRIPT_URL,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type":
+                                                "text/plain;charset=utf-8"
+                                        },
+                                        body: JSON.stringify({
+                                            action: "adminDeleteRow",
+                                            username: sesiAdminUsername,
+                                            password: sesiAdminPassword,
+                                            row: item.row
+                                        })
+                                    }
+                                );
+
+                            const hasil =
+                                await respon.json();
+
+                            if (hasil.status === "success") {
+
+                                div.remove();
+
+                                fetchUcapan();
+
+                                /*
+                                    Muat semula senarai admin supaya
+                                    nombor baris (row) yang lain
+                                    kekal betul selepas satu baris
+                                    dipadam.
+                                */
+
+                                muatSemulaAdminPanel();
+
+                            } else {
+
+                                statusEl.textContent =
+                                    "Gagal memadam.";
+
+                            }
+
+                        } catch (error) {
+
+                            console.error(error);
+
+                            statusEl.textContent =
+                                "Ralat rangkaian. Sila cuba lagi.";
+
+                        }
+
+                    }
+                );
+
+
+                div.appendChild(paparan);
+                div.appendChild(editWrap);
+                div.appendChild(actions);
+                div.appendChild(statusEl);
+
+                adminRsvpList.appendChild(div);
+
+            });
+
+        }
+
+
+        refreshAdminListButton.addEventListener(
+            "click",
+            muatSemulaAdminPanel
+        );
+
+
+        simpanKuotaButton.addEventListener(
+            "click",
+            async function () {
+
+                kuotaStatus.textContent =
+                    "Menyimpan...";
+
+                try {
+
+                    const respon =
+                        await fetch(
+                            GOOGLE_SCRIPT_URL,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type":
+                                        "text/plain;charset=utf-8"
+                                },
+                                body: JSON.stringify({
+                                    action: "setKuota",
+                                    username: sesiAdminUsername,
+                                    password: sesiAdminPassword,
+                                    kuota: kuotaInput.value
+                                })
+                            }
+                        );
+
+                    const hasil =
+                        await respon.json();
+
+                    if (hasil.status === "success") {
+
+                        kuotaStatus.textContent =
+                            "Kuota disimpan.";
+
+                    } else {
+
+                        kuotaStatus.textContent =
+                            "Gagal menyimpan kuota.";
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    kuotaStatus.textContent =
+                        "Ralat rangkaian. Sila cuba lagi.";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================================
+           6c. SENARAI UCAPAN
+
+           Mengambil senarai ucapan yang telah dihantar
+           daripada Google Apps Script (kaedah GET).
+
+           PENTING:
+           Google Apps Script perlu ada fungsi doGet()
+           yang memulangkan senarai ucapan dalam format JSON.
+           Jika belum disediakan, senarai akan kekal kosong.
+           ========================================================= */
+
+        async function fetchUcapan() {
+
+            const senaraiUcapanList =
+                document.getElementById(
+                    "senaraiUcapanList"
+                );
+
+            try {
+
+                const response =
+                    await fetch(
+                        GOOGLE_SCRIPT_URL
+                    );
+
+                const senarai =
+                    await response.json();
+
+                if (
+                    !senarai ||
+                    senarai.length === 0
+                ) {
+
+                    return;
+
+                }
+
+
+                /* -----------------------------------------
+                   Kira statistik kehadiran
+                   (Jumlah tetamu, bukan bilangan RSVP)
+                   ----------------------------------------- */
+
+                let jumlahHadir = 0;
+
+                senarai.forEach(function (item) {
+
+                    if (item.kehadiran === "Hadir") {
+
+                        jumlahHadir +=
+                            parseInt(
+                                item.jumlahTetamu,
+                                10
+                            ) || 1;
+
+                    }
+
+                });
+
+                document.getElementById(
+                    "jumlahHadir"
+                ).textContent = jumlahHadir;
+
+
+                /* -----------------------------------------
+                   Papar senarai ucapan
+                   (Ucapan dahulu, Nama di bawah)
+                   ----------------------------------------- */
+
+                senaraiUcapanList.innerHTML = "";
+
+                senarai.forEach(function (item) {
+
+                    if (!item.ucapan) {
+
+                        return;
+
+                    }
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className = "ucapan-item";
+
+                    const teks =
+                        document.createElement(
+                            "p"
+                        );
+
+                    teks.className = "ucapan-teks";
+
+                    teks.textContent =
+                        item.ucapan || "";
+
+                    const nama =
+                        document.createElement(
+                            "p"
+                        );
+
+                    nama.className = "ucapan-nama";
+
+                    nama.textContent =
+                        item.nama || "Tetamu";
+
+                    div.appendChild(teks);
+                    div.appendChild(nama);
+
+                    senaraiUcapanList.appendChild(
+                        div
+                    );
+
+                });
+
+            } catch (error) {
+
+                console.log(
+                    "Tidak dapat mengambil senarai ucapan:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        fetchUcapan();
+
+
+        /* =========================================================
+           6d. AUTO SCROLL SENARAI UCAPAN
+
+           Senarai ucapan akan scroll perlahan-lahan secara
+           automatik dan berulang. Berhenti seketika apabila
+           tetamu sentuh/scroll sendiri, kemudian sambung semula.
+           ========================================================= */
+
+        (function autoScrollUcapan() {
+
+            const senaraiUcapanList =
+                document.getElementById(
+                    "senaraiUcapanList"
+                );
+
+            let scrollTerhenti = false;
+
+            let scrollTimeout = null;
+
+
+            function teruskanScroll() {
+
+                scrollTerhenti = false;
+
+            }
+
+
+            ["mousedown", "touchstart", "wheel"].forEach(
+                function (namaEvent) {
+
+                    senaraiUcapanList.addEventListener(
+                        namaEvent,
+                        function () {
+
+                            scrollTerhenti = true;
+
+                            clearTimeout(scrollTimeout);
+
+                            scrollTimeout =
+                                setTimeout(
+                                    teruskanScroll,
+                                    4000
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+
+            setInterval(
+                function () {
+
+                    if (scrollTerhenti) {
+
+                        return;
+
+                    }
+
+                    const capaiHujung =
+                        senaraiUcapanList.scrollTop + 1 >=
+                        senaraiUcapanList.scrollHeight -
+                        senaraiUcapanList.clientHeight;
+
+                    if (capaiHujung) {
+
+                        senaraiUcapanList.scrollTop = 0;
+
+                    } else {
+
+                        senaraiUcapanList.scrollTop += 1;
+
+                    }
+
+                },
+                50
+            );
+
+        })();
+
+
+
+        /* =========================================================
+           7. FUNGSI SCROLL NAVIGATION
+
+           Digunakan oleh bottom navigation.
+           ========================================================= */
+
+        function scrollToSection(
+            sectionId
+        ) {
+
+            const section =
+                document.getElementById(
+                    sectionId
+                );
+
+
+            if (section) {
+
+                section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        }
+
+
+
+        /* =========================================================
+           8. PAUSE VIDEO APABILA SECTION TIDAK DILIHAT
+
+           Ini membantu mengurangkan penggunaan
+           CPU / bateri pada telefon.
+
+           Video akan dimainkan apabila section
+           masuk ke skrin.
+           ========================================================= */
+
+        const videos =
+            document.querySelectorAll(
+                ".video-background"
+            );
+
+
+        const videoObserver =
+            new IntersectionObserver(
+                function (entries) {
+
+                    entries.forEach(
+                        function (entry) {
+
+                            const video =
+                                entry.target;
+
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                video.play()
+                                    .catch(
+                                        function () {}
+                                    );
+
+                            } else {
+
+                                video.pause();
+
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.25
+                }
+            );
+
+
+        videos.forEach(
+            function (video) {
+
+                videoObserver.observe(
+                    video
+                );
+
+            }
+        );
+
+
+
+        /* =========================================================
+           9. ANIMASI TEKS SEMASA SCROLL
+
+           Semua elemen dengan class "animate-on-scroll" akan
+           fade-in + naik sedikit bila ia masuk skrin semasa
+           tetamu scroll.
+           ========================================================= */
+
+        const elemenAnimasi =
+            document.querySelectorAll(
+                ".animate-on-scroll"
+            );
+
+        const animasiObserver =
+            new IntersectionObserver(
+                function (entries) {
+
+                    entries.forEach(
+                        function (entry) {
+
+                            if (entry.isIntersecting) {
+
+                                entry.target.classList.add(
+                                    "animasi-nampak"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.2
+                }
+            );
+
+
+        elemenAnimasi.forEach(
+            function (elemen) {
+
+                animasiObserver.observe(
+                    elemen
+                );
+
+            }
+        );
+
+
+    </script>
+
+</body>
+
+</html>
